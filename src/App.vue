@@ -20,7 +20,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import head from './components/head';
+  import head from './components/head.vue';
 
   export default{
     created: function () {

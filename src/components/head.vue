@@ -50,6 +50,24 @@
             <div class="detail-text">优惠信息</div>
             <div class="detail-line"></div>
           </div>
+
+          <ul v-if="seller.supports" class="detail-support">
+            <li v-for="support in seller.supports">
+              <span class="detail-icon" :class="classMap[0]"></span>
+              <span class="detail-support-text">{{ support.description }}</span>
+            </li>
+          </ul>
+
+          <div class="detail-title">
+            <div class="detail-line"></div>
+            <div class="detail-text">商家公告</div>
+            <div class="detail-line"></div>
+          </div>
+
+          <p class="detail-bulletin">
+            {{ seller.bulletin }}
+          </p>
+
         </div>
       </div>
       <div class="detail-close" @click="closeDetail">+</div>
@@ -69,7 +87,7 @@
     data: function () {
       // data 函数里面存放数据，return 返回里面的是 Object
       return {
-        detailShow: true
+        detailShow: false
       }
     },
     methods: { // 里面封装了所有的事件
@@ -182,7 +200,7 @@
     margin-right: 4px;
   }
 
-  .des {
+  .icon, .des {
     background: url("./decrease_1@3x.png") top center;
     background-size: 12px 12px;
   }
@@ -258,6 +276,7 @@
     height: 100%;
     overflow: auto;
     background: rgba(7, 17, 27, 0.8);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   /* sticky footer 布局 start */
@@ -307,7 +326,7 @@
   .detail-title {
     display: flex;
     width: 80%;
-    margin: 30px auto 24px auto;
+    margin: 28px auto 24px auto;
   }
 
   .detail-line {
@@ -320,6 +339,50 @@
   .detail-text {
     padding: 0 12px;
     font-size: 14px;
+    font-weight: 700;
   }
 
+  .detail-support {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 12px;
+    font-size: 0;
+  }
+
+  .detail-support > li {
+    margin-top: 12px;
+  }
+
+  .detail-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: top;
+  }
+
+  .detail-icon, .des {
+    background: url("./decrease_1@3x.png") top center no-repeat;
+    background-size: 16px 16px;
+    vertical-align: top;
+    margin-right: 6px;
+  }
+
+  .detail-support-text {
+    font-size: 12px;
+    font-weight: 200;
+    color: #ffffff;
+    line-height: 12px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 2px;
+  }
+
+  .detail-bulletin{
+    width: 80%;
+    padding: 0 12px;
+    margin: 24px auto 0 auto;
+    font-size: 12px;
+    line-height: 24px;
+    font-weight: 200;
+  }
 </style>
