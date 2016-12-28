@@ -29,6 +29,13 @@
                   <span class="price">&yen;<b>{{food.price}}</b></span>
                   <span v-show="food.oldPrice" class="old-price">&yen;{{food.oldPrice}}</span>
                 </div>
+
+                <div class="option-box clearfix">
+                  <span class="option-add" @click="addFood"> + </span>
+                  <!-- false && undefined 返回 fase; true && true -->
+                  <span class="food-count" v-if="orderFoods[food.name] && orderFoods[food.name].count">{{ orderFoods[food.name].count }}</span>
+                  <span class="option-reduce" @click="reduceFood" v-if="orderFoods[food.name] && orderFoods[food.name].count"> - </span>
+                </div>
               </div>
             </li>
           </ul>
@@ -39,11 +46,11 @@
 </template>
 
 <script type="text/ecmascript-6">
+  let $ = require('jquery');
+  import Vue from 'vue';
+
   export default{
     props: ['seller'],
-    mounted: function () {
-
-    },
     created(){
       this.$http.get('/api/goods').then((res) => {
           res = res.body;
@@ -56,7 +63,8 @@
     },
     data(){
       return {
-        goods: {}
+        goods: {},
+        orderFoods: {}
       }
     },
     methods: {
@@ -69,6 +77,25 @@
             document.getElementById("food-wrapper").scrollTop = dom_list[index].offsetTop;
           }
         }
+      }
+      ,
+      addFood: function (e) {
+        let foodName = $(e.currentTarget).closest('div.food-content').find('h2').text();
+        let foodPrice = $(e.currentTarget).closest('div.food-content').find('b').text();
+        if (!this.orderFoods[foodName]) {
+
+          // 设置没有的属性，需要使用 Vue.set() 方法，否则 vue 无法监听被设置的属性
+          Vue.set(this.orderFoods, foodName, {});
+          Vue.set(this.orderFoods[foodName], 'foodPrice', foodPrice);
+          Vue.set(this.orderFoods[foodName], 'count', 1);
+        } else {
+          this.orderFoods[foodName].count++;
+        }
+        console.log(this.orderFoods);
+      },
+      reduceFood: function (e) {
+        let foodName = $(e.currentTarget).closest('div.food-content').find('h2').text();
+        this.orderFoods[foodName].count--;
       }
     }
   };
@@ -195,6 +222,7 @@
     font-size: 0;
     vertical-align: top;
     width: 100%;
+    position: relative;
   }
 
   .food-content .food-content-name {
@@ -237,5 +265,28 @@
     font-size: 10px;
     color: rgb(147, 153, 159);
     text-decoration: line-through;
+  }
+
+  .option-box {
+    font-size: 0;
+    position: absolute;
+    right: 18px;
+    bottom: -10px;
+  }
+
+  .option-reduce, .option-add, .food-count {
+    display: inline-block;
+    line-height: 24px;
+    height: 24px;
+    text-align: center;
+    width: 24px;
+    font-size: 10px;
+    float: right;
+  }
+
+  .option-reduce, .option-add {
+    color: #ffffff;
+    background: rgb(0, 160, 220);
+    border-radius: 1000px;
   }
 </style>
