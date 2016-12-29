@@ -5,14 +5,12 @@
     </div>
 
     <div class="current-price">
-      &yen;{{totalPrice}}元
+      &yen;{{ totalPrice }}元
     </div>
     <div class="extra-money">
-      另需要配送费{{seller.deliveryPrice}}元
+      另需要配送费{{ seller.deliveryPrice }}元
     </div>
-    <div class="submit-button">
-      &yen;{{seller.minPrice}}元起送
-    </div>
+    <div class="submit-button" :class="{'submit-active': totalPrice >= 20}">{{ submitMessage }}</div>
   </div>
 </template>
 
@@ -39,6 +37,15 @@
           totalPrice += this.orderFoods[item].count * this.orderFoods[item].foodPrice;
         }
         return totalPrice;
+      },
+      submitMessage: function () {
+        let minPirce = this.seller.minPrice;
+        let diff = minPirce - this.totalPrice;
+        if (diff <= 0) {
+          return "立刻订购";
+        } else {
+          return '还差' + diff + "元起送";
+        }
       }
     }
   };
@@ -118,5 +125,10 @@
     font-size: 12px;
     text-align: center;
     width: 105px;
+  }
+
+  .submit-active {
+    background: rgb(0, 160, 220);
+    color: #ffffff;
   }
 </style>
