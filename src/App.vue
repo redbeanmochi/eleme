@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- 将数据绑定在 v-head 组件上，传递到 v-head 组件内 -->
-    <v-head v-bind:seller="seller"></v-head>
+    <v-head :seller="seller"></v-head>
 
     <div class="tab border-1px">
       <div class="tab-item">
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 

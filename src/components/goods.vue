@@ -32,9 +32,10 @@
 
                 <div class="option-box clearfix">
                   <span class="option-add" @click="addFood"> + </span>
-                  <!-- false && undefined 返回 fase; true && true -->
+                  <!-- undefined && 未定义 返回 false; true && true -->
                   <span class="food-count" v-if="orderFoods[food.name] && orderFoods[food.name].count">{{ orderFoods[food.name].count }}</span>
-                  <span class="option-reduce" @click="reduceFood" v-if="orderFoods[food.name] && orderFoods[food.name].count"> - </span>
+                  <span class="option-reduce" @click="reduceFood"
+                        v-if="orderFoods[food.name] && orderFoods[food.name].count"> - </span>
                 </div>
               </div>
             </li>
@@ -42,12 +43,14 @@
         </li>
       </ul>
     </div>
+    <shopping-cart :seller="seller" :orderFoods="orderFoods"></shopping-cart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  let $ = require('jquery');
+  import $ from 'jquery';
   import Vue from 'vue';
+  import ShoppingCart from './shoppingCart.vue';
 
   export default{
     props: ['seller'],
@@ -77,8 +80,7 @@
             document.getElementById("food-wrapper").scrollTop = dom_list[index].offsetTop;
           }
         }
-      }
-      ,
+      },
       addFood: function (e) {
         let foodName = $(e.currentTarget).closest('div.food-content').find('h2').text();
         let foodPrice = $(e.currentTarget).closest('div.food-content').find('b').text();
@@ -91,12 +93,14 @@
         } else {
           this.orderFoods[foodName].count++;
         }
-        console.log(this.orderFoods);
       },
       reduceFood: function (e) {
         let foodName = $(e.currentTarget).closest('div.food-content').find('h2').text();
         this.orderFoods[foodName].count--;
       }
+    },
+    components: {
+      "shopping-cart": ShoppingCart
     }
   };
 </script>
